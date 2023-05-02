@@ -1,5 +1,11 @@
+
+//------------------------ INCLUDES --------------------------- 
 #include <iostream>
 
+//------------------------- MACROS ----------------------------
+#define CREDIT_CARD_NUMBERS				15
+
+//-------------------- GLOBAL VARIABLES ----------------------- 
 unsigned long long card_num = 0;
 unsigned long long divider = 1000000000000000;
 unsigned long long digits[15] = { 0 };
@@ -9,41 +15,54 @@ unsigned int sum = 0;
 unsigned int first_digit = 0;
 unsigned int last_digit = 0;
 
+//---------------- PRIVATE FUNCTION PROTOTYPES ----------------
+static void separate_digits (void);
+static void multiply_digits (void);
+static void process_double_digits (void);
+static void get_sum (void);
+static void get_last_digit (void);
 
 int main()
 {
-	//std::cout << "Unesi broj kartice (bez zadnje znamenke) " << std::endl;
-	//std::cin >> card_num;
-	//std::cout << card_num;
+	std::cout << "Unesi broj kartice (bez zadnje znamenke) " << std::endl;
+	std::cin >> card_num;	
 
-	//card_num = 462765390853591; // last number is 8
-	//card_num = 462765385035704; // last number is 8
-	card_num = 462765390970578; // last number is 3
-	
 	// separate the digits of card number
-	for (int i = 0; i < 15; i++)
+	separate_digits();
+	// multiply every second digits by 2
+	multiply_digits();
+	// process double digits
+	process_double_digits();
+	// get the sum
+	get_sum();
+	// get the last digit
+	get_last_digit();
+}
+
+//------------------- PRIVATE FUNCTIONS ---------------------
+static void separate_digits (void) 
+{	
+	for (int i = 0; i < CREDIT_CARD_NUMBERS; i++)
 	{
 		divider = divider / 10;
-		digits[i] = (card_num / divider ) % 10;
-		std::cout << digits[i] << std::endl;
+		digits[i] = (card_num / divider) % 10;		
 	}
+}
 
-	std::cout << "---------------" << std::endl;
-
-	// multiply every second digits by 2
-	for (int i = 0; i < 15; i++)
+static void multiply_digits (void)
+{
+	for (int i = 0; i < CREDIT_CARD_NUMBERS; i++)
 	{
 		if (i % 2 == 0)
 		{
-			digits[i] = digits[i] * 2;			
+			digits[i] = digits[i] * 2;
 		}
-		std::cout << digits[i] << std::endl;
 	}
+}
 
-	std::cout << "---------------" << std::endl;
-
-	// process double digits
-	for (int i = 0; i < 15; i++)
+static void process_double_digits (void)
+{
+	for (int i = 0; i < CREDIT_CARD_NUMBERS; i++)
 	{
 		if (digits[i] > 9)
 		{
@@ -51,24 +70,20 @@ int main()
 			second_num = digits[i] % 10;
 			digits[i] = first_num + second_num;
 		}
-		std::cout << digits[i] << std::endl;
 	}
+}
 
-	std::cout << "---------------" << std::endl;
-
-	// the sum
-	for (int i = 0; i < 15; i++)
+static void get_sum (void)
+{
+	for (int i = 0; i < CREDIT_CARD_NUMBERS; i++)
 	{
-		sum += digits[i];		
+		sum += digits[i];
 	}
-	std::cout << sum << std::endl;
+}
 
-	std::cout << "---------------" << std::endl;
-
-	// get the last digit
+static void get_last_digit (void)
+{
 	first_digit = sum / 10;
-	std::cout << first_digit << std::endl;
-	std::cout << "---------------" << std::endl;
 	last_digit = (first_digit + 1) * 10 - sum;
-	std::cout << last_digit << std::endl;
+	std::cout << "The last digit of this card number is: " << last_digit << std::endl;
 }
